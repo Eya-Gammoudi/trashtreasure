@@ -1,0 +1,106 @@
+{% extends 'greener_Base.html' %}
+
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+
+<style>
+    .errorMessage {
+      color: white;
+    }
+
+    #send-btn {
+      background-color: #857b63;
+      padding: 15px;
+    }
+
+    #send-btn:hover {
+      color: #fff;
+    }
+
+</style>
+
+<link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
+
+
+<div class="fluid-container">
+
+  <div class="row">
+
+    <div class="col-6 col-lg-2 col-sm-4 col-md-4 d-flex flex-column align-items-center text-center menu" id="left-page">
+
+      <div class="logo">
+        <img src="{% static 'images/composter_logo.svg' %}"/>
+      </div>
+  
+      <div>
+        <a href="{% url 'greenerHomeChooseComposter' %}"><i class="bi bi-house"></i>Dashboard</a>
+      </div>
+  
+      <div>
+        <a href="{% url 'greenerNotification' %}">
+          <i class="bi bi-bell"></i>Notifications<span class="badge bg-danger">{{notif}}</span>
+        </a>
+      </div>
+  
+      <div>
+        <a href="#" class="disabled-anchor"><i class="bi bi-arrow-right-square"></i>Submit Compost</a>
+        <span class="errorMessage" style="display: none;"></span>
+      </div>
+      
+      <div>
+        <a href="{% url 'sentRequests' %}"><i class="bi bi-book"></i>View History</a>
+        <span class="errorMessage" style="display: none;"></span>
+      </div>
+      
+      <div class="mt-5">
+        <a href="{% url 'logoff' %}"><i class="bi bi-door-open"></i>Logout</a>
+      </div>
+        
+    </div>
+
+
+    <div class="col-6 col-lg-10 col-sm-8 col-md-8 d-flex flex-column align-items-center" id="right-page">
+            <div class="d-flex flex-column align-items-center">
+                <i class='bx bxs-message' style="font-size: 10em; color:#d9d9d9;"></i>
+                <h2>Link your account !</h2>
+                <p style="padding:20px; font-size: 20px;" class="text-center">
+                    If you want to contribute your compostable materials to a composter community, you need to send a joining request 
+                    to a composter and link your account. You'll need to provide personal info and agree to the composter's policies.
+                    Once the composter accepts your request, your account is linked, and then you'll be able to submit your leftovers.
+                </p>
+                <div  style="margin-bottom:100px">
+                    <a id="send-btn" href="{% url 'greenerRequestComposterLink' %}">Send a Joining Request to a Composter <i class="bi bi-arrow-right-square"></i></a></button>
+                </div>
+                
+            </div>
+        </div>
+
+
+  </div>
+</div>
+
+<script>
+  document.addEventListener("DOMContentLoaded", function() {
+    var anchors = document.querySelectorAll(".disabled-anchor");
+    var errorMessageElements = document.querySelectorAll(".errorMessage");
+
+    anchors.forEach(function(anchor) {
+      anchor.addEventListener("click", function(event) {
+
+        errorMessageElements.forEach(function(errorMessageElement) {
+          errorMessageElement.style.display = "none";
+        });
+
+        var errorMessageElement = this.nextElementSibling;
+        errorMessageElement.innerText = "You need to be linked to a composter";
+        errorMessageElement.style.display = "inline";
+      });
+    });
+  });
+</script>
+
+{% endblock %}

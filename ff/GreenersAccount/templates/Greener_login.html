@@ -1,0 +1,136 @@
+{% extends 'greener_Base.html' %}
+
+{% load static %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+
+<link href="https://fonts.googleapis.com/css?family=Lato:300,400,700&display=swap" rel="stylesheet">
+
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<link rel="stylesheet" href="{% static 'css/greener-login-style.css' %}">
+
+<style>
+	a {
+		border: none;
+	         }
+	         a:hover {
+		background-color: inherit;
+		transition: none;
+		color: inherit;
+	         }
+	         body {
+		background-color: green;
+	         }
+	         .login-wrap {
+		background-color: white;
+		padding: 40px;
+		border-radius: 10px;
+		box-shadow: 0px 0px 20px rgba(0, 0, 0, 0.1);
+	         }
+	         .heading-section h2 {
+		color: green;
+		font-family: 'Lato', sans-serif;
+		font-weight: 700;
+	         }
+	         .wrap .login-wrap h3 {
+		color: green;
+		font-family: 'Lato', sans-serif;
+		font-weight: 700;
+	         }
+	         .submit {
+		background-color: green;
+		border-color: green;
+		color: black;
+	         }
+	         .signin-form {
+		font-family: 'Lato', sans-serif;
+		font-weight: 400;
+	         }
+	         .signin-form .label {
+		font-weight: 700;
+	         }
+	         .signin-form button[type="submit"] {
+		font-family: 'Lato', sans-serif;
+		font-weight: 700;
+	         }
+	         .custom-heading {
+		font-family: 'Lato', sans-serif;
+		font-weight: 700;
+		letter-spacing: 1px;
+		display: flex;
+		align-items: center;
+		justify-content: center;
+		color: green;
+	         }
+	         .custom-heading .signin {
+		color: black;
+		margin-left: 15px;
+	         }
+</style>
+
+<section class="ftco-section">
+            <div class="container">
+		<div class="row justify-content-center">
+			<div class="col-md-6 text-center mb-5">
+			</div>
+		</div>
+		<div class="row justify-content-center">
+			<div class="col-md-12 col-lg-10">
+				<div class="wrap d-md-flex">
+					<div class="img" style="background-image: url('{% static "images/bg.jpg" %}');">
+					</div>
+					<div class="login-wrap p-4 p-md-5">
+						<div class="d-flex">
+							<div class="w-100">
+								<h3 class="custom-heading mb-5"><span>GREENER</span><span class="signin">SIGNIN</span></h3>
+							</div>
+							<div class="w-100">
+								<p class="social-media d-flex justify-content-end">
+									<a href="#"
+										class="social-icon d-flex align-items-center justify-content-center"><span
+											class="fa fa-facebook"></span></a>
+									<a href="#"
+										class="social-icon d-flex align-items-center justify-content-center"><span
+											class="fa fa-twitter"></span></a>
+								</p>
+							</div>
+						</div>
+						<form action="#" class="signin-form" method="POST">
+							{% csrf_token %}
+							<div class="form-group mb-3">
+								<label class="label" for="{{ form.email.email }}">Email</label>
+								{{ form.email }}
+							</div>
+							<div class="form-group mb-3">
+								<label class="label" for="{{ form.password.password }}">Password</label>
+								{{ form.password }}
+							</div>
+							<div class="form-group">
+								<button type="submit" class="form-control btn btn-success rounded submit px-3">Sign In</button>
+							</div>
+							<div class="form-group d-md-flex">
+								<div class="w-50 text-left">
+									<label class="checkbox-wrap checkbox-primary mb-0">
+										<input type="checkbox" id="remember" name="remember">
+										<span class="checkmark"></span>
+										Remember Me
+									  </label>
+									  
+								</div>
+								<div class="w-50 text-md-right">
+									<a href="#">Forgot Password</a>
+								</div>
+							</div>
+						</form>
+						<p class="text-center">Not a member? <a data-toggle="tab" href="{% url 'greenerSignup' %}">Sign Up</a></p>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</section>
+
+{% endblock %}

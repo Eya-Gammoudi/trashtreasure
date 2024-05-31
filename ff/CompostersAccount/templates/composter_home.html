@@ -1,0 +1,99 @@
+{% extends 'composter_Base.html' %}
+{% load static %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+
+<style>
+
+#map {
+    margin-top: 3%;
+    width: 80%;
+    height: 80%;
+}
+
+.leaflet-control-zoom-in:before {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  content: '+';
+}
+
+.leaflet-control-zoom-out:before {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+  width: 100%;
+  content: '-';
+}
+
+.leaflet-control-zoom a span {
+  display: none;
+}
+</style>
+
+<div class="fluid-container">
+
+    <div class="row">
+        <div class="col-6 col-lg-2 col-sm-4 col-md-4 d-flex flex-column align-items-center text-center menu" id="left-page">
+
+            <div class="logo"><img src="{% static 'images/composter_logo.svg' %}"></div>
+            <div class="greeners-calndar"><a href="{% url 'composterHome' %}"><i class="bi bi-house"></i>Dashboard</a></div>
+            <div class="greeners-request"><a href="{% url 'getGreenersOffer'%}"><i class="bi bi-archive-fill"></i>Greeners Requests</a></div>
+            <div class="pending-members"><a href="{% url 'getPendingMembers' %}"><i class="bi bi-person-plus-fill"></i>Pending Members</a></div>
+            <div class="mb-5 c-greeners-request"><a href="{% url 'getComposterMembers' %}"><i class="bi bi-people-fill"></i>My Members</a></div>
+            <div class="mt-5"><a href="{% url 'logoff' %}"><i class="bi bi-door-open"></i>Logout</a></div>
+        
+        </div>
+    
+
+        <div class="col-6 col-lg-10 col-sm-8 col-md-8 d-flex flex-column align-items-center " id="right-page">
+            <!--<div>{{composter.CommunityName}}</div>-->
+            <div id="map" data-latitude="{{ latitude }}" data-longitude="{{ longitude }}" data-greeners="{{ greeners_json }}"></div>
+        </div>
+
+    </div>
+
+</div>
+
+<script>
+
+var latitude = parseFloat(
+    document.getElementById("map").getAttribute("data-latitude")
+  );
+  var longitude = parseFloat(
+    document.getElementById("map").getAttribute("data-longitude")
+  );
+
+  var map = L.map("map").setView([latitude, longitude], 7);
+
+  L.tileLayer("https://tile.openstreetmap.org/{z}/{x}/{y}.png", {
+    attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors',
+  }).addTo(map);
+
+
+  var customIcon = L.icon({
+        iconUrl: '{% static "images/bag_icon.png" %}',
+        iconSize: [56, 56],
+    });
+
+    fetch('/Composter/offers_data/')
+    .then(response => response.json())
+    .then(data => {
+        console.log(data.GreenersOffersJson);
+        
+        // Loop through the JSON data and create a marker for each location
+        data.GreenersOffersJson.forEach(offer => {
+            const marker = L.marker([offer.GreenerLocationY, offer.GreenerLocationX], { icon: customIcon }).addTo(map);
+            marker.bindPopup(`Name: ${offer.GreenerFirstName} ${offer.GreenerLastName}<br>Animal Manure Quantity: ${offer.manure} Kg<br>Green Material Quantity: ${offer.green_material} Kg<br>Brown Material Quantity: ${offer.brown_material} Kg<br>Start Date: ${offer.date_range_start}<br>End Date: ${offer.date_range_end}`);
+        });
+    })
+    .catch(error => console.error(error));
+
+
+</script>
+{% endblock %}

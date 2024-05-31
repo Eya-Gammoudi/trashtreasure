@@ -1,0 +1,83 @@
+{% extends 'composter_Base.html' %}
+
+{% load static %}
+
+{% block title %}Requests{% endblock %}
+
+{% block content %}
+
+<div class="fluid-container">
+    <div class="row">
+        <div class="col-6 col-lg-2 col-sm-4 col-md-4 d-flex flex-column align-items-center text-center menu" id="left-page">
+
+            <div class="logo"><img src="{% static 'images/composter_logo.svg' %}"></div>
+            <div class="greeners-calndar"><a href="{% url 'composterHome' %}"><i class="bi bi-house"></i>Dashboard</a></div>
+            <div class="greeners-request"><a href="{% url 'getGreenersOffer'%}"><i class="bi bi-archive-fill"></i>Greeners Requests</a></div>
+            <div class="pending-members"><a href="{% url 'getPendingMembers' %}"><i class="bi bi-person-plus-fill"></i>Pending Members</a></div>
+            <div class="mb-5 c-greeners-request"><a href="{% url 'getComposterMembers' %}"><i class="bi bi-people-fill"></i>My Members</a></div>
+            <div class="mt-5"><a href="{% url 'logoff' %}"><i class="bi bi-door-open"></i>Logout</a></div>
+
+        </div>
+
+        <div class="col-6 col-lg-10 col-sm-8 col-md-8 d-flex flex-column align-items-center" id="right-page">
+            <div class="container">
+                <div class="col text-center">
+                    <h1 class="my-4 display-5 fw-bold">Received Offers</h1>
+                </div>
+                <ul class="list-group mt-5">
+                    <li class="list-group-item list-group-item-dark text-center">
+                        <div class="row">
+                            <div class="col">From</div>
+                            <div class="col">Green Material(Kg)</div>
+                            <div class="col">Brown Material(Kg)</div>
+                            <div class="col">Manure(Kg)</div>
+                            <div class="col">Date Start</div>
+                            <div class="col">Date End</div>
+                            <div class="col">Confirmation</div>
+                        </div>
+                    </li>
+                    {% for offer in offers %}
+                    <li class="list-group-item">
+                        <div class="row align-items-center">
+                            <div class="col" style="font-size: 1.1rem">
+                                {{ offer.sender }}
+                            </div>
+                            <div class="col text-center" style="font-size: 1.1rem">
+                                {{ offer.green_material }}
+                            </div>
+                            <div class="col text-center" style="font-size: 1.1rem">
+                                {{ offer.brown_material }}
+                            </div>
+                            <div class="col text-center" style="font-size: 1.1rem">
+                                {{ offer.manure }}
+                            </div>
+                            <div class="col text-center" style="font-size: 1.1rem">
+                                {{ offer.date_range_start }}
+                            </div>
+                            <div class="col text-center" style="font-size: 1.1rem">
+                                {{ offer.date_range_end }}
+                            </div>
+                            <div class="col text-center" style="font-size: 1.1rem">
+                                {% if offer.Status == 'pending' %}
+                                <a href="{% url 'confirm_offer' offer.id %}" class="btn btn-success">
+                                    <i class="bi bi-check-circle"></i>
+                                </a>
+                                <a href="{% url 'decline_offer' offer.id %}" class="btn btn-danger">
+                                    <i class="bi bi-x-circle"></i>
+                                </a>
+                                {% elif offer.Status == 'completed' %}
+                                    <i class="bi bi-check-circle-fill text-success"></i>
+                                {% elif offer.Status == 'declined' %}
+                                    <i class="bi bi-x-circle-fill text-danger"></i>
+                                {% endif %}
+                            </div>
+                        </div>
+                    </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}

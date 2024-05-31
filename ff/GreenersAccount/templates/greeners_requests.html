@@ -1,0 +1,96 @@
+{% extends 'greener_Base.html' %}
+
+{% load static %}
+
+{% block title %}Offers{%endblock %}
+
+{% block content %}
+
+<div class="fluid-container">
+    <div class="row">
+        <div class="col-6 col-lg-2 col-sm-4 col-md-4 d-flex flex-column align-items-center text-center menu" id="left-page">
+
+            <div class="logo"><img src="{% static 'images/composter_logo.svg' %}"></div>
+            <div class="c-greeners-dashboard"><a href="{% url 'greenerHome' %}"><i class="bi bi-house"></i>Dashboard</a></div>
+            <div class="c-greeners-notifications">
+                <a href="{% url 'greenerNotification' %}">
+                    <i class="bi bi-bell"></i>Notifications<span class="badge bg-danger">{{notif}}</span>
+                </a>
+              </div>
+            <div class="c-greeners-submit"><a href="{% if disabled %}#{% else %}{% url 'compostOffer' %}{% endif %}"><i class='bi bi-arrow-right-square'></i>Submit Compost</a></div>
+            <div class="c-greeners-request"><a href="{% url 'sentRequests' %}"><i class="bi bi-book"></i>View History</a></div>
+            <div class="mt-5"><a href="{% url 'logoff' %}"><i class="bi bi-door-open"></i>Logout</a></div>
+            
+          </div>
+
+        <div class="col-6 col-lg-10 col-sm-8 col-md-8 d-flex flex-column align-items-center" id="right-page">
+            <div class="container">
+                <div class="col text-center">
+                    <h1 class="my-4 display-5 fw-bold">My Offers</h1>
+                </div>
+                <ul class="list-group text-center">
+                    <li class="list-group-item list-group-item-dark">
+                        <div class="row">
+                            <div class="col">Green Material(Kg)</div>
+                            <div class="col">Brown Material(Kg)</div>
+                            <div class="col">Manure(Kg)</div>
+                            <div class="col">Date Start</div>
+                            <div class="col">Date End</div>
+                            <div class="col">Confirmation</div>
+                        </div>
+                    </li>
+                    {% if offers %}
+                    {% for offer in offers %}
+                        <li class="list-group-item">
+                            <div class="row">
+                                <div class="col" style="font-size: 1.1rem;">{{ offer.green_material }}</div>
+                                <div class="col" style="font-size: 1.1rem;">{{ offer.brown_material }}</div>
+                                <div class="col" style="font-size: 1.1rem;">{{ offer.manure }}</div>
+                                <div class="col" style="font-size: 1.1rem;">{{ offer.date_range_start }}</div>
+                                <div class="col" style="font-size: 1.1rem;">{{ offer.date_range_end }}</div>
+                                <div class="col" style="font-size: 1.1rem;">
+                                    {% if offer.Status == 'completed' %}
+                                        <i class="bi bi-check-circle-fill text-success"></i>
+                                    {% elif offer.Status == 'declined' or offer.Status == 'expired' %}
+                                        <i class="bi bi-x-circle-fill text-danger"></i>
+                                    {% elif offer.Status == 'pending' %}
+                                        <i class="bi bi-three-dots"></i>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </li>
+                    {% endfor %}
+                    {% else %}
+                    <div class="card mb-3">
+                        <div class="card-body">
+                            <p class="card-text">No offers found.</p>
+                        </div>
+                    </div>
+                    {% endif %}
+                </ul>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+    var anchors = document.querySelectorAll(".disabled-anchor");
+    var errorMessageElements = document.querySelectorAll(".errorMessage");
+
+    anchors.forEach(function(anchor) {
+      anchor.addEventListener("click", function(event) {
+
+        errorMessageElements.forEach(function(errorMessageElement) {
+          errorMessageElement.style.display = "none";
+        });
+
+        var errorMessageElement = this.nextElementSibling;
+        errorMessageElement.innerText = "You need to be linked to a composter";
+        errorMessageElement.style.display = "inline";
+      });
+    });
+  });
+</script>
+
+{% endblock %}
